@@ -1,0 +1,8 @@
+﻿<Solution>
+  <Project Path="UnityEngine.UI.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="UnityEditor.UI.csproj" />
+  <Project Path="Unity.2D.Tilemap.Editor.csproj" />
+  <Project Path="Unity.2D.Sprite.Editor.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>

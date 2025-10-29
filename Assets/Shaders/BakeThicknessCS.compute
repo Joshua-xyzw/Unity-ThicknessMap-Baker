@@ -1,0 +1,29 @@
+#pragma kernel CSMain
+#define FLOAT_EPSILON 1e-6
+#include "Assets/Scripts/BSPhysics/Bvh.hlsl"
+
+Texture2D<float4> ModelSpacePosition;
+Texture2D<float4> ModelSpaceNormal;
+RWTexture2D<float4> Result;
+float MaxDepth;
+float Exponent;
+float GetThickValue(float thick,float maxThick,float exp)
+{
+    return 1.0-pow(abs(thick)/maxThick,exp);
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float3 origin = ModelSpacePosition[id.xy].xyz;
+    float3 dir = -ModelSpaceNormal[id.xy].xyz;//Construct a ray with a opposite direction of normal 
+    float distance;
+    float3 normal;
+    if(!TraverseBvh(origin,dir,distance,normal))
+    {
+        //if without insect,it means a hole in the oppsite
+        distance = MaxDepth;
+    }
+    float thick = GetThickValue(distance,MaxDepth,Exponent);
+    Result[id.xy] = float4(thick,thick,thick,1.0);
+}
